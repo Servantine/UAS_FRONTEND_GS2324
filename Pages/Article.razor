@@ -1,0 +1,38 @@
+﻿@page "/article"
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+<PageTitle>Article</PageTitle>
+
+<h1>Postingan</h1>
+
+@if (posts != null)
+{
+    foreach (var post in posts)
+    {
+        foreach (var photos in photos)
+        {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src=" @photos.thumbnailUrl" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"> @post.title </h5>
+                    <p class="card-text"> @post.body </p>
+                    <a href="@photos.url" class="btn btn-primary">Go See</a>
+                    <p class="card-text"> @comments.body </p>
+                </div>
+            </div>
+        }
+    }
+}
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await Http.GetFromJsonAsync<List<Post>>("https://jsonplaceholder.typicode.com/posts");
+        photos = await Http.GetFromJsonAsync<List<Photos>>("https://jsonplaceholder.typicode.com/photos");
+        comments = await Http.GetFromJsonAsync<List<Photos>>("https://jsonplaceholder.typicode.com/comments");
+    }
+    protected List<Post> posts = new();
+    protected List<Photos> photos = new();
+    protected List<Comments> comments = new();
+}

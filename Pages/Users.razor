@@ -1,0 +1,43 @@
+﻿@page "/users"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+
+@if (users != null)
+{
+    foreach (var user in users)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                    <th>Company</th>
+                </tr>
+            </thead>
+            <tbody>
+            <td> @user.id </td>
+            <td> @user.name  </td>
+            <td> @user.username </td>
+            <td> @user.email </td>
+            <td> @user.phone </td>
+            <td> @user.webiste </td>
+            <td> @user.company </td>
+            </tbody>
+        </table>
+    }
+}
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<Users>>("https://jsonplaceholder.typicode.com/users");
+    }
+    protected List<Users> users = new();
+}
